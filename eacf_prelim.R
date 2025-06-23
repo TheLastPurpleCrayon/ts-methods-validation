@@ -1,6 +1,6 @@
 suppressMessages(library(tidyverse))
 suppressMessages(library(TSA))
-library(fut)
+library(parallelly)
 
 # idea for end result: a matrix of proportions of the time the 
 # eacf was correct in that position

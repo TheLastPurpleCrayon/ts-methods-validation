@@ -43,11 +43,11 @@ simulate.arma11 <- function(nseries, Nsim, seed) {
   out.matrix
 }
 
-tic <- Sys.time()
-result <- simulate.arma11(nseries = 1000, Nsim = 1000, seed = factorial(10))
-toc <- Sys.time()
-toc-tic
-result
+# tic <- Sys.time()
+# result <- simulate.arma11(nseries = 1000, Nsim = 1000, seed = factorial(10))
+# toc <- Sys.time()
+# toc-tic
+# result
 
 
 

@@ -1,6 +1,5 @@
 source("eacf_prelim.R")
 library(googlesheets4)
-library(lubridate)
 library(hms)
 
 url <- "https://docs.google.com/spreadsheets/d/1zw2tG0Hya0vnF6qJFGar3dfsipFrWSgVL0_L2DeWjGY/edit?usp=sharing"

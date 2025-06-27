@@ -5,12 +5,11 @@ suppressMessages(library(hms))
 # args
 args <- commandArgs(trailingOnly = TRUE)
 
-if (length(args) != 2 | !is.numeric(args[1]) | !is.numeric(args[2])) {
-  print("Usage: Rscript eacf_prelim.R <series length> <num bootstrap loops>")
-  stop()
+if (length(args) != 2) {
+  stop("Usage: Rscript simulation.R <series length> <num bootstrap loops>")
 }
-nseries <- args[1]
-Nsim <- args[2]
+nseries <- as.numeric(args[1])
+Nsim <- as.numeric(args[2])
 
 # authorize access to the google sheet
 gs4_auth(email = read_file("../antiscrape/email.txt") |> str_replace("\n", ""))

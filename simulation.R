@@ -12,6 +12,9 @@ if (length(args) != 2 | !is.numeric(args[1]) | !is.numeric(args[2])) {
 nseries <- args[1]
 Nsim <- args[2]
 
+# authorize access to the google sheet
+gs4_auth(email = read_file("../antiscrape/email.txt") |> str_replace("\n", ""))
+
 # initialize vars
 url <- "https://docs.google.com/spreadsheets/d/1zw2tG0Hya0vnF6qJFGar3dfsipFrWSgVL0_L2DeWjGY/edit?usp=sharing"
 sysname <- Sys.info()["nodename"] |> unname()

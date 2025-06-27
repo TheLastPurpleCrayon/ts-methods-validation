@@ -6,7 +6,8 @@ suppressMessages(library(hms))
 args <- commandArgs(trailingOnly = TRUE)
 
 if (length(args) != 2 | !is.numeric(args[1]) | !is.numeric(args[2])) {
-  stop("Usage: Rscript eacf_prelim.R <series length> <num bootstrap loops>")
+  print("Usage: Rscript eacf_prelim.R <series length> <num bootstrap loops>")
+  stop()
 }
 nseries <- args[1]
 Nsim <- args[2]

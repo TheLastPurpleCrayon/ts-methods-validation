@@ -40,7 +40,7 @@ simulate.arma11 <- function(nseries, Nsim, seed) {
   }
   
   out.matrix <- out.matrix/Nsim
-  out.matrix
+  as.data.frame(out.matrix)
 }
 
 # tic <- Sys.time()

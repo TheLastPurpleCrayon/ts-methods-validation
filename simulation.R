@@ -30,12 +30,12 @@ start_printout <- c("EACF run",
                     "Number Bootstraps:", Nsim) |> matrix() |> t() |> as.data.frame()
 
 # start writing to the sheet
-range_write(url, data = start_printout, range = paste0("A", output_row), col_names = F)
+range_write(url, data = start_printout, range = paste0("A", output_row), col_names = F, sheet = sysname)
 output_row <- output_row + 1
 
 # do the simulation!
 results <- simulate.arma11(nseries, Nsim, seed = factorial(10))
-range_write(url, data = results, range = paste0("A", output_row), col_names = F)
+range_write(url, data = results, range = paste0("A", output_row), col_names = F, sheet = sysname)
 output_row <- output_row + nrow(results)
 
 # write the final output
@@ -44,4 +44,4 @@ finish_time.formatted <- format(finish_time, "%Y-%m-%d %H:%M:%S")
 elapsed_time <- as_hms(finish_time - start_time) |> as.character() |> str_sub(1, 8)
 final_printout <- c("Finished at:", finish_time.formatted,
                     "Time elapsed:", elapsed_time) |> matrix() |> t() |> as.data.frame()
-range_write(url, data = final_printout, range = paste0("A", output_row), col_names = F)
+range_write(url, data = final_printout, range = paste0("A", output_row), col_names = F, sheet = sysname)

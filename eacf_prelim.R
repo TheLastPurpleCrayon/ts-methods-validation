@@ -22,12 +22,15 @@ simulate.arma11 <- function(nseries, Nsim, seed) {
   
   out.matrix <- matrix(0, nrow = 8, ncol = 14)
   
+  spec <- list(ar = NA, ma = NA)
+  series <- numeric(nseries)
+  
   set.seed(seed)
   for (i in 1:Nsim){
-    spec <- list(ar = runif(1, min = -1, max = 1), 
-                 ma = runif(1, min = -1, max = 1))
+    spec$ar[] <- runif(1, min = -1, max = 1)
+    spec$ma[] <- runif(1, min = -1, max = 1)
     
-    series <- arima.sim(model = spec, n = nseries)
+    series[] <- arima.sim(model = spec, n = nseries)
     e <- eacfQUIET(series)$result
     
     for (row in 1:nrow(out.matrix)) {
@@ -37,6 +40,7 @@ simulate.arma11 <- function(nseries, Nsim, seed) {
         }
       }
     }
+    rm(e)
   }
   
   out.matrix <- out.matrix/Nsim

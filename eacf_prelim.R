@@ -6,6 +6,7 @@ library(parallelly)
 # eacf was correct in that position
 
 simulate.arma11 <- function(nseries, Nsim, seed) {
+  # hard code the theoretical eacf for an ARMA(1, 1) process
   theoretical <- matrix(
     c(rep("x", 14),
       rep("x", 1), rep("o", 13),
@@ -18,29 +19,30 @@ simulate.arma11 <- function(nseries, Nsim, seed) {
     ncol = 14, nrow = 8, byrow = T, dimnames = list(0:7, 0:13)
   )
   
+  # suppress automatic printing
   eacfQUIET <- quietly(eacf)
-  
-  out.matrix <- matrix(0, nrow = 8, ncol = 14)
-  
+
+  # initialize variables
+  out.matrix <- matrix(0, nrow = 8, ncol = 14) # start with an output matrix of all 0's
+  empirical <- matrix(NA, nrow = 8, ncol = 14)
   spec <- list(ar = NA, ma = NA)
   series <- numeric(nseries)
   
   set.seed(seed)
   for (i in 1:Nsim){
+    # generate random values for the AR and MA terms
     spec$ar[] <- runif(1, min = -1, max = 1)
     spec$ma[] <- runif(1, min = -1, max = 1)
     
+    # generate a series based on the random coefficients and compute its eacf
     series[] <- arima.sim(model = spec, n = nseries)
-    e <- eacfQUIET(series)$result
+    empirical[] <- eacfQUIET(series)$result$symbol
     
-    for (row in 1:nrow(out.matrix)) {
-      for (col in 1:ncol(out.matrix)) {
-        if (theoretical[row, col] == e$symbol[row, col]) {
-          out.matrix[row, col] <- out.matrix[row, col] + 1
-        }
-      }
-    }
-    rm(e)
+    # if the empirical values match the theoretical, increment that position in out.matrix
+    out.matrix[] <- out.matrix + (theoretical == empirical)
+    
+    # run garbage collection every 1000 iterations
+    if (i %% 1000 == 0) gc()
   }
   
   out.matrix <- out.matrix/Nsim

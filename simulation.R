@@ -16,7 +16,7 @@ Nsim <- as.numeric(args[3])
 gs4_auth(email = read_file("../antiscrape/email.txt") |> str_replace("\n", ""))
 
 # initialize vars
-url <- read_file("../antiscrape.ts_sheet.txt") |> str_replace("\n", "")
+url <- read_file("../antiscrape/ts_sheet.txt") |> str_replace("\n", "")
 sysname <- Sys.info()["nodename"] |> unname()
 start_time <- Sys.time()
 start_time.formatted <- format(start_time, "%Y-%m-%d %H:%M:%S")

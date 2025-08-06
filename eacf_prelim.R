@@ -67,11 +67,16 @@ simulate.arma21 <- function(nseries, Nsim, seed) {
   out.matrix <- matrix(0, nrow = 8, ncol = 14)
   empirical <- matrix(NA, nrow = 8, ncol = 14)
   spec <- list(ar = rep(NA, 2), ma = NA) # changed
+  candidate.ars <- rep(NA, 2) # added
   series <- numeric(nseries)
   
   set.seed(seed)
   for (i in 1:Nsim){
-    spec$ar[] <- runif(2, min = -1, max = 1) # changed
+    candidate.ars[] <- runif(2, min = -1, max = 1) # changed
+    while (!all(abs(polyroot(c(1, -candidate.ars))) > 1)) { # added
+      candidate.ars[] <- runif(2, min = -1, max = 1)
+    }
+    spec$ar[] <- candidate.ars # changed
     spec$ma[] <- runif(1, min = -1, max = 1)
     
     series[] <- arima.sim(model = spec, n = nseries)
@@ -84,5 +89,4 @@ simulate.arma21 <- function(nseries, Nsim, seed) {
   out.matrix <- out.matrix/Nsim
   as.data.frame(out.matrix)
 }
-
 

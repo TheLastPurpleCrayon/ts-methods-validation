@@ -5,17 +5,18 @@ suppressMessages(library(hms))
 # args
 args <- commandArgs(trailingOnly = TRUE)
 
-if (length(args) != 2) {
-  stop("Usage: Rscript simulation.R <series length> <num bootstrap loops>")
+if (length(args) != 3) {
+  stop("Usage: Rscript simulation.R <pq> <series length> <num bootstrap loops>")
 }
-nseries <- as.numeric(args[1])
-Nsim <- as.numeric(args[2])
+mode <- args[1]
+nseries <- as.numeric(args[2])
+Nsim <- as.numeric(args[3])
 
 # authorize access to the google sheet
 gs4_auth(email = read_file("../antiscrape/email.txt") |> str_replace("\n", ""))
 
 # initialize vars
-url <- "https://docs.google.com/spreadsheets/d/1zw2tG0Hya0vnF6qJFGar3dfsipFrWSgVL0_L2DeWjGY/edit?usp=sharing"
+url <- read_file("../antiscrape.ts_sheet.txt") |> str_replace("\n", "")
 sysname <- Sys.info()["nodename"] |> unname()
 start_time <- Sys.time()
 start_time.formatted <- format(start_time, "%Y-%m-%d %H:%M:%S")
@@ -23,7 +24,7 @@ start_time.formatted <- format(start_time, "%Y-%m-%d %H:%M:%S")
 output_row <- 1
 results <- matrix(nrow = 1)
 
-start_printout <- c("EACF run", 
+start_printout <- c(paste0("ARMA(", substr(mode, 1, 1), ", ", substr(mode, 2, 2), ")"), 
                     "Time:", start_time.formatted, 
                     "System:", sysname, 
                     "Series Length:", nseries,
@@ -34,7 +35,14 @@ range_write(url, data = start_printout, range = paste0("A", output_row), col_nam
 output_row <- output_row + 1
 
 # do the simulation!
-results <- simulate.arma11(nseries, Nsim, seed = factorial(10))
+if (mode == "11") {
+  results <- simulate.arma11(nseries, Nsim, seed = factorial(10))
+} else if (mode == "21") {
+  results <- simulate.arma21(nseries, Nsim, seed = factorial(10))
+} else {
+  stop("Invalid mode :( Currently implemented modes are 11 and 21")
+}
+
 range_write(url, data = results, range = paste0("A", output_row), col_names = F, sheet = sysname)
 output_row <- output_row + nrow(results)
 

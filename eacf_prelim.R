@@ -80,6 +80,26 @@ simulate.arma21 <- function(nseries, Nsim, seed) {
     spec$ma[] <- runif(1, min = -1, max = 1)
     
     series[] <- arima.sim(model = spec, n = nseries)
+    
+    ### ERROR DIAGNOSIS
+    
+    if (!is.numeric(series)) {
+      print(paste0("!is.numeric(series) was tripped at iteration ", i))
+      print(paste0("AR: ", spec$ar, " MA: ", spec$ma))
+      print(paste0("Series: ", series))
+    } else if (anyNA(series)) {
+      print(paste0("anyNA(series) was tripped at iteration ", i))
+      print(paste0("AR: ", spec$ar, " MA: ", spec$ma))
+      print(paste0("Series: ", series))
+    } else if (sd(series) < 1e-8) {
+      print(paste0("sd(series) < 1e-8 was tripped at iteration ", i))
+      print(paste0("AR: ", spec$ar, " MA: ", spec$ma))
+      print(paste0("Series: ", series))
+      print(paste0("sd(series) = ", sd(series)))
+    }
+    
+    ###
+    
     empirical[] <- eacfQUIET(series)$result$symbol
     
     out.matrix[] <- out.matrix + (theoretical == empirical)

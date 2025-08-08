@@ -73,7 +73,7 @@ simulate.arma21 <- function(nseries, Nsim, seed) {
   set.seed(seed)
   for (i in 1:Nsim){
     candidate.ars[] <- runif(2, min = -1, max = 1) # changed
-    while (!all(abs(polyroot(c(1, -candidate.ars))) > 1)) { # added
+    while (min(Mod(polyroot(c(1, -candidate.ars)))) > 1.001) { # added
       candidate.ars[] <- runif(2, min = -1, max = 1)
     }
     spec$ar[] <- candidate.ars # changed
@@ -89,9 +89,9 @@ simulate.arma21 <- function(nseries, Nsim, seed) {
     )
     
     if (is.null(tmp)) {
-      print(paste0("error in eacf() was caught at iteration ", i))
-      print(paste0("AR: ", spec$ar, " MA: ", spec$ma))
-      print(paste0("Series: ", series))
+      cat("error in eacf() was caught at iteration ", i)
+      cat("AR: ", spec$ar, " MA: ", spec$ma)
+      cat("Series: ", series)
     }
     
     ###

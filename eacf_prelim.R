@@ -83,19 +83,15 @@ simulate.arma21 <- function(nseries, Nsim, seed) {
     
     ### ERROR DIAGNOSIS
     
-    if (!is.numeric(series)) {
-      print(paste0("!is.numeric(series) was tripped at iteration ", i))
+    tmp <- tryCatch(
+      eacfQUIET(series)$result$symbol,
+      error = function(e) return(NULL)
+    )
+    
+    if (is.null(tmp)) {
+      print(paste0("error in eacf() was caught at iteration ", i))
       print(paste0("AR: ", spec$ar, " MA: ", spec$ma))
       print(paste0("Series: ", series))
-    } else if (anyNA(series)) {
-      print(paste0("anyNA(series) was tripped at iteration ", i))
-      print(paste0("AR: ", spec$ar, " MA: ", spec$ma))
-      print(paste0("Series: ", series))
-    } else if (sd(series) < 1e-8) {
-      print(paste0("sd(series) < 1e-8 was tripped at iteration ", i))
-      print(paste0("AR: ", spec$ar, " MA: ", spec$ma))
-      print(paste0("Series: ", series))
-      print(paste0("sd(series) = ", sd(series)))
     }
     
     ###

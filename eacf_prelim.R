@@ -73,7 +73,7 @@ simulate.arma21 <- function(nseries, Nsim, seed) {
   set.seed(seed)
   for (i in 1:Nsim){
     candidate.ars[] <- runif(2, min = -1, max = 1) # changed
-    while (min(Mod(polyroot(c(1, -candidate.ars)))) > 1.001) { # added
+    while (!(min(Mod(polyroot(c(1, -candidate.ars)))) > 1.001)) { # added
       candidate.ars[] <- runif(2, min = -1, max = 1)
     }
     spec$ar[] <- candidate.ars # changed

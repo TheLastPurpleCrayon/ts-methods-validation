@@ -6,6 +6,8 @@ library(parallelly)
 # eacf was correct in that position
 
 simulate.arma11 <- function(nseries, Nsim, seed) {
+  tic <- Sys.time()
+  
   # hard code the theoretical eacf for an ARMA(1, 1) process
   theoretical <- matrix(
     c(rep("x", 14),
@@ -42,7 +44,12 @@ simulate.arma11 <- function(nseries, Nsim, seed) {
     out.matrix[] <- out.matrix + (theoretical == empirical)
     
     # run garbage collection every 1000 iterations
-    if (i %% 1000 == 0) gc()
+    if (i %% 1000 == 0) {
+      gc()
+      toc <- Sys.time()
+      cat("Finished ", i, " th iteration. ", toc-tic)
+      tic <- toc
+    }
   }
   
   out.matrix <- out.matrix/Nsim

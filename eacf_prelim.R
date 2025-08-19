@@ -45,9 +45,9 @@ simulate.arma11 <- function(nseries, Nsim, seed) {
     
     # run garbage collection every 1000 iterations
     if (i %% 1000 == 0) {
-      gc()
+      gc(verbose = T)
       toc <- Sys.time()
-      cat("Finished ", i, " th iteration. ", toc-tic)
+      print(paste0("Finished ", i, " th iteration. ", toc-tic))
       tic <- toc
     }
   }
